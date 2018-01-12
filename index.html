@@ -18,10 +18,13 @@
   <script type="text/javascript">
     console.log("ready!");
 
+    // these values will come from the html5_geolocation
     var xVal = 0;
     var yVal = 0;
+
     var a = document.getElementById("listings");
 
+    // returns list of nearby sites
     function findSites() {
 
       queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + xVal + "%2C+y%3A" + yVal +
@@ -38,11 +41,8 @@
         for (var i = 0; i < results.length; i++) {
           console.log(results[i].attributes);
           // a.append(results[i].attributes.address);
-            a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.address + "<br>" + "x: " + results[i].geometry.x + ", y: " + results[i].geometry.y + "<br><br>";
-
-
+          a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.address + "<br>" + "x: " + results[i].geometry.x + ", y: " + results[i].geometry.y + "<br><br>";
         }
-
       });
     }
 
@@ -50,6 +50,7 @@
     var g = document.getElementById("demo");
 
     function getLocation() {
+      $('#listings').empty();
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
       } else {
