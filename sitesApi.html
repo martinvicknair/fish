@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>sitesApi</title>
+</head>
+
+<body>
+  <p>Click the button to find the nearest Kids Sites.</p>
+  <button onclick="getLocation()">Try It</button>
+  <p id="demo"></p>
+  <p id="listings"></p>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript">
+    console.log("ready!");
+
+    var xVal = 0;
+    var yVal = 0;
+    var a = document.getElementById("listings");
+
+    function findSites() {
+
+      queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + xVal + "%2C+y%3A" + yVal +
+        "%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=10.&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=5&returnExceededLimitFeatures=true&f=pjson&token=";
+
+      $.ajax({
+        url: queryURL,
+        method: 'GET'
+      }).done(function(response) {
+        // console.log(response);
+        obj = JSON.parse(response);
+        results = obj.features;
+        console.log(results);
+        for (var i = 0; i < results.length; i++) {
+          console.log(results[i].attributes);
+          // a.append(results[i].attributes.address);
+            a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.address + "<br><br>";
+
+        }
+
+      });
+    }
+
+    //code below from https://www.w3schools.com/html/html5_geolocation.asp
+    var g = document.getElementById("demo");
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else {
+        g.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function showPosition(position) {
+      g.innerHTML = "Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude;
+      xVal = position.coords.longitude;
+      yVal = position.coords.latitude;
+      findSites();
+    }
+  </script>
+</body>
+
+</html>
