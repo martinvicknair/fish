@@ -38,7 +38,8 @@
         for (var i = 0; i < results.length; i++) {
           console.log(results[i].attributes);
           // a.append(results[i].attributes.address);
-            a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.address + "<br><br>";
+            a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.address + "<br>" + "x: " + results[i].geometry.x + ", y: " + results[i].geometry.y + "<br><br>";
+
 
         }
 
