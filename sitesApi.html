@@ -19,17 +19,22 @@
   <script type="text/javascript">
     console.log("ready!");
 
+    var a = document.getElementById("listings");
+
     // these values will come from the html5_geolocation
     var userX = 0;
     var userY = 0;
 
-    var a = document.getElementById("listings");
+    //sets radius in miles and number of sites within that radius for query
+    var radius = 2;
+    var numSites = 99;
 
-    // returns list of nearby sites
+    // returns a list of sites using an ajax GET api query
     function findSites() {
 
       queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + userX + "%2C+y%3A" + userY +
-        "%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=2.&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=99&returnExceededLimitFeatures=true&f=pjson&token=";
+        "%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=" + radius + ".&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=" +
+        numSites + "&returnExceededLimitFeatures=true&f=pjson&token=";
 
       $.ajax({
         url: queryURL,
@@ -47,23 +52,19 @@
           days = results[i].attributes.daysofOperation;
           contact = formatPhoneNumber(results[i].attributes.contactPhone);
           LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
-          listing = name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + LatLng + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:+1-' + contact + '">' + contact + '</a>' + ' for meal times<br>' + LatLng + '<br><br>';
+          listing = name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + LatLng + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:+1-' + contact + '">' +
+            contact + '</a>' + ' for meal times<br>' + LatLng + '<br><br>';
 
           a.innerHTML = a.innerHTML + listing;
         }
       });
     }
 
-    //code from https://gist.github.com/yitznewton/4f096a8c5fc1e6bd08c7 (Starbucks Stores API / Google Maps JS API mashup with browser geolocation)
-
-// + 'Call ' + '<a href="tel+1-' + contact + '">' + contact + '</a>' + ' for meal times<br>' +
-
-
     // code from https://stackoverflow.com/questions/8358084/regular-expression-to-reformat-a-us-phone-number-in-javascript
     function formatPhoneNumber(s) {
       var s2 = ("" + s).replace(/\D/g, '');
       var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
-      return (!m) ? null :  m[1] + "-" + m[2] + "-" + m[3];
+      return (!m) ? null : m[1] + "-" + m[2] + "-" + m[3];
     }
 
     //code from https://www.w3schools.com/html/html5_geolocation.asp
@@ -79,8 +80,8 @@
     }
 
     function showPosition(position) {
-      g.innerHTML = "Latitude: " + position.coords.latitude +
-        "<br>Longitude: " + position.coords.longitude;
+      g.innerHTML = "Latitude(y): " + position.coords.latitude +
+        "<br>Longitude(x): " + position.coords.longitude;
       userX = position.coords.longitude;
       userY = position.coords.latitude;
       findSites();
