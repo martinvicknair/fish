@@ -1,4 +1,4 @@
-# food finder api
+# kids food finder api
 
 
 I have moved my working copy to <a href="https://martinvicknair.github.io/proto/sitesApi.html">sitesApi.html</a>
