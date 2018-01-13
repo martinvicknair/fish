@@ -47,9 +47,9 @@
           address = results[i].attributes.address;
           days = results[i].attributes.daysofOperation;
           contact = formatPhoneNumber(results[i].attributes.contactPhone);
-          longLat = results[i].geometry.x + ", " + results[i].geometry.y;
+          LatLng =  results[i].geometry.y + "," + results[i].geometry.x ;
 
-          listing = name + "<br>" + sponsor + "<br>" + address + "<br>" + "Serving on: " + days + "<br>" + "Call " + contact + " for meal times<br>" + longLat + "<br><br>";
+          listing = name + "<br>" + sponsor + "<br>" + address + "<br>" + "Serving on: " + days + "<br>" + "Call " + contact + " for meal times<br>" + LatLng + "<br><br>";
 
           a.innerHTML = a.innerHTML + listing;
         }
@@ -57,9 +57,36 @@
     }
 
     //code from https://gist.github.com/yitznewton/4f096a8c5fc1e6bd08c7 (Starbucks Stores API / Google Maps JS API mashup with browser geolocation)
-
-
-
+    var positionToStarbucksLatlng = function(position) {
+      return userY + ',' + userX;
+    };
+    var positionToGoogleLatLng = function(position) {
+      return new google.maps.LatLng(
+        LatLng
+      );
+    };
+    var storeToGoogleLatLng = function(store) {
+      return new google.maps.LatLng(
+        store.store.coordinates.latitude,
+        store.store.coordinates.longitude
+      );
+    };
+    var drawStoresMap = function(position, storesData) {
+      var map = new google.maps.Map(document.getElementById('map-canvas'), {
+        center: positionToGoogleLatLng(position),
+        zoom: 12
+      });
+      for (var i = 0; i < storesData.stores.length; i++) {
+        drawMarker(map, storesData.stores[i]);
+      }
+    };
+    var drawMarker = function(map, store) {
+      var marker = new google.maps.Marker({
+        map: map,
+        position: storeToGoogleLatLng(store),
+        title: store.store.name
+      });
+    };
 
     // code from https://stackoverflow.com/questions/8358084/regular-expression-to-reformat-a-us-phone-number-in-javascript
     function formatPhoneNumber(s) {
