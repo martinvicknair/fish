@@ -16,15 +16,22 @@
 </head>
 <body>
 
+  <div class="well well-lg"id =" map-canvas">
+    map will go here in the map well  
+  </div>
     <div class="jumbotron">
-        <h1>Free Food Near You</h1>
+      
         <p>Lets get some food</p>
-        <p><a class="btn btn-primary btn-lg">Search</a></p>
-      </div>
-      <div class="well well-lg">
-        map will go here in the map well  
-</div>
-         <div class="well well-lg">
+        <p><a class="btn btn-primary btn-lg" id ="find-me">Search</a></p>
+        <div class="form-group">
+          <label class="control-label" for="focusedInput">My location</label>
+          <input class="form-control" id="location-input" type="text" value="My address">
+        </div>
+
+
+    </div>
+
+         <div class="well well-lg"id ="listings-area">
           <h2>Top 3 locations</h2>
 
           This is the location "well" will be dynamicaly created by JS 
@@ -45,12 +52,7 @@
     </div>
  
   
-    
 
-    <div class="form-group">
-            <label class="control-label" for="focusedInput">Write a comment</label>
-            <input class="form-control" id="focusedInput" type="text" value="How I feel about this food site">
-    </div>
 <footer>
         <div class="panel-footer">footer</div>
      
