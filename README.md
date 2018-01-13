@@ -1,4 +1,4 @@
-# kids food finder api
+# go(fish)
 
 
-I have moved my working copy to <a href="https://martinvicknair.github.io/proto/sitesApi.html">sitesApi.html</a>
+<a href="https://martinvicknair.github.io/proto/sitesApi.html">kids food finder api - sitesApi.html</a>
