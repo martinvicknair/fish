@@ -46,9 +46,8 @@
           address = results[i].attributes.address;
           days = results[i].attributes.daysofOperation;
           contact = formatPhoneNumber(results[i].attributes.contactPhone);
-          longLat = results[i].geometry.x + ", " + results[i].geometry.y;
-
-          listing = name + "<br>" + sponsor + "<br>" + address + "<br>" + "Serving on: " + days + "<br>" + "Call " + contact + " for meal times<br>" + longLat + "<br><br>";
+          LatLng = results[i].geometry.y + "," + results[i].geometry.x;
+          listing = name + "<br>" + sponsor + "<br>" + address + "<br>" + "Serving on: " + days + "<br>" + "Call " + contact + " for meal times<br>" + LatLng + "<br><br>";
 
           a.innerHTML = a.innerHTML + listing;
         }

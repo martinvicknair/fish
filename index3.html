@@ -65,8 +65,8 @@
     };
     var storeToGoogleLatLng = function(store) {
       return new google.maps.LatLng(
-        store.store.coordinates.latitude,
-        store.store.coordinates.longitude
+        results[i].geometry.y,
+        results[i].geometry.x
       );
     };
     var drawStoresMap = function(position, storesData) {
@@ -74,7 +74,7 @@
         center: positionToGoogleLatLng(position),
         zoom: 12
       });
-      for (var i = 0; i < storesData.stores.length; i++) {
+      for (var i = 0; i < results.length; i++) {
         drawMarker(map, storesData.stores[i]);
       }
     };
