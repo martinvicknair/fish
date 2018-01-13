@@ -7,3 +7,16 @@ siteName,sponsoringOrganization, address,contactPhone,startDate, endDate, daysof
 https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A-105.0588229%2C+y%3A39.7489245%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=10.&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&applyVCSProjection=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnDistinctValues=false&resultRecordCount=50&returnZ=false&returnM=false&returnExceededLimitFeatures=true&sqlFormat=none&f=pjson&token=
 
 https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A-105.0588229%2C+y%3A39.7489245%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=10.&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=50&returnExceededLimitFeatures=true&f=pjson&token=
+
+
+//https://stackoverflow.com/questions/1300838/how-to-convert-an-address-into-a-google-maps-link-not-map
+$(document).ready(function(){
+    $("address").each(function(){
+        var embed ="<iframe width='425' height='350' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0' src='https://maps.google.com/maps?&amp;q="+ encodeURIComponent( $(this).text() ) +"&amp;output=embed'></iframe>";
+        $(this).html(embed);
+    });
+});
+https://developers.google.com/maps/documentation/urls/guide
+https://www.google.com/maps/search/?api=1&query=LatLng
+
+ maps.google.com/?ll=38.882147,-76.99017
