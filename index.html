@@ -5,53 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Free Food Near You </title>
-  <!-- link to Jquery , fire base and other needed  -->
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- link to Jquery , fire base and other needed  -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm9jtLUThY_3O1Uec3Ao-DWDkkBNzCl3U&callback=initMap"async defer></script>
-  <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!-- This bootstrap style sheet   -->
+    <!-- This bootstrap style sheet   -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- link to local style sheet -->
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
-</head>
+    <!-- local js file  -->
+    <script src ="./assets/javascript/app.js" > </script>
+    <!-- firebase call  -->
+    <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBwqOP8xxIPNdvvD6WIrX9GhUsFMv5pmKM",
+        authDomain: "fish-d7e20.firebaseapp.com",
+        databaseURL: "https://fish-d7e20.firebaseio.com",
+        projectId: "fish-d7e20",
+        storageBucket: "fish-d7e20.appspot.com",
+        messagingSenderId: "200040964005"
+      };
+      firebase.initializeApp(config);
+      </script>
+  </head>
 <body>
-
-  <div class="well well-lg"id =" map-canvas">
-    map will go here in the map well
-  </div>
+  <div class="well well-lg"id =" map-canvas">Map</div>
     <div class="jumbotron">
-
-        <p>Lets get some food</p>
+        <p>ARE YOU HUNGRY?</p>
         <p><a class="btn btn-primary btn-lg" id ="find-me">Search</a></p>
         <div class="form-group">
           <label class="control-label" for="focusedInput">My location</label>
           <input class="form-control" id="location-input" type="text" value="My address">
         </div>
-
-
     </div>
-
-    <div class="well well-lg"id ="listings-area">
-         
+    <div class="well well-lg" id="listings-area">
       <ul class="list-group">
         <li class="list-group-item">
-        listing goes here
+        Search Results:
         </li>
-
       </ul>
     </div>
-
-
-
 <footer>
-        <div class="panel-footer">footer</div>
-
+  <div class="panel-footer">Free Food Near YOU - Project 1</div>
 </footer>
-
-
-
- <!-- local js file  -->
- <script src ="./assets/javascript/app.js" > </script>
 </body>
 </html>
