@@ -19,15 +19,15 @@
     console.log("ready!");
 
     // these values will come from the html5_geolocation
-    var xVal = 0;
-    var yVal = 0;
+    var userX = 0;
+    var userY = 0;
 
     var a = document.getElementById("listings");
 
     // returns list of nearby sites
     function findSites() {
 
-      queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + xVal + "%2C+y%3A" + yVal +
+      queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + userX + "%2C+y%3A" + userY +
         "%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=2.&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=99&returnExceededLimitFeatures=true&f=pjson&token=";
 
       $.ajax({
@@ -40,10 +40,24 @@
         console.log(results);
         for (var i = 0; i < results.length; i++) {
           console.log(results[i].attributes);
-          // a.append(results[i].attributes.address);
-          a.innerHTML = a.innerHTML + results[i].attributes.siteName + "<br>" + results[i].attributes.sponsoringOrganization + "<br>" + results[i].attributes.address + "<br>" + "x: " + results[i].geometry.x + ", y: " + results[i].geometry.y + "<br><br>";
+          name = results[i].attributes.siteName;
+          sponsor = results[i].attributes.sponsoringOrganization;
+          address = results[i].attributes.address;
+          days = results[i].attributes.daysofOperation;
+          contact = formatPhoneNumber(results[i].attributes.contactPhone);
+          longLat = results[i].geometry.x + ", " + results[i].geometry.y;
+
+          listing = name + "<br>" + sponsor + "<br>" + address + "<br>" + "Serving on: " + days + "<br>" + "Call " + contact + " for meal times<br>" + longLat + "<br><br>";
+
+          a.innerHTML = a.innerHTML + listing;
         }
       });
+    }
+
+    function formatPhoneNumber(s) {
+      var s2 = ("" + s).replace(/\D/g, '');
+      var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+      return (!m) ? null :  m[1] + "-" + m[2] + "-" + m[3];
     }
 
     //code below from https://www.w3schools.com/html/html5_geolocation.asp
@@ -61,8 +75,8 @@
     function showPosition(position) {
       g.innerHTML = "Latitude: " + position.coords.latitude +
         "<br>Longitude: " + position.coords.longitude;
-      xVal = position.coords.longitude;
-      yVal = position.coords.latitude;
+      userX = position.coords.longitude;
+      userY = position.coords.latitude;
       findSites();
     }
   </script>
