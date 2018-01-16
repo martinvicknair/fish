@@ -55,19 +55,39 @@ $(document).ready(function() {
       results = obj.features;
       console.log(results);
       $("#listings-area").empty();
+      //header = '<p align="center"><img src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="" /></p>';
+      //$("#listings-area").append(header);
       for (var i = 0; i < results.length; i++) {
         // console.log(results[i].attributes);
         name = results[i].attributes.siteName;
         sponsor = results[i].attributes.sponsoringOrganization;
         address = results[i].attributes.address;
+        breakfastTime = results[i].attributes.breakfastTime;
+        lunchTime = results[i].attributes.lunchTime;
         encAddress = encodeURIComponent(address);
         days = results[i].attributes.daysofOperation;
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
         phone = results[i].attributes.contactPhone;
         LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
 
-        listing = '<li class="list-group-item spec">' + name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:/1' + phone + '">' +
-          contact + '</a>' + ' for meal times</li>';
+        //insert code for calculating distance from LatLng to the x and y of the location
+        milesCalc = '.3'
+
+        if (lunchTime == null) {
+          lunchTime = 'not serving lunch';
+        }
+        if (breakfastTime == null) {
+          breakfastTime = 'not serving breakfast';
+        }
+
+        listing = '<li align="center" class="list-group-item spec"><strong><h1 align="center">' + (i+1) + '</h1><h3>' + name + '</h3></strong>'
+        + 'Serving on: ' + days + '<br>'
+        + 'Breakfast Time: ' + breakfastTime + '<br>'
+        + 'Lunch Time: ' + lunchTime + '<br>'
+        + '<h4>' + milesCalc + ' miles away</h4>'
+        + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
+        + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
+
         $("#listings-area").append(listing);
       }
     });
