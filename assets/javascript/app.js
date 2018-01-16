@@ -66,7 +66,7 @@ $(document).ready(function() {
         phone = results[i].attributes.contactPhone;
         LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
 
-        listing = '<li class="list-group-item spec">' + name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:+1-' + contact + '">' +
+        listing = '<li class="list-group-item spec">' + name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:/1' + phone + '">' +
           contact + '</a>' + ' for meal times</li>';
         $("#listings-area").append(listing);
       }
@@ -107,6 +107,7 @@ $(document).ready(function() {
   }
 
   // from https://stackoverflow.com/questions/8358084/regular-expression-to-reformat-a-us-phone-number-in-javascript
+  // mobile hyperlink attribute to place a call is href="tel:/13038005415"
   function formatPhoneNumber(s) {
     var s2 = ("" + s).replace(/\D/g, '');
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
