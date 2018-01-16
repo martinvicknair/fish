@@ -15,8 +15,8 @@ $(document).ready(function() {
   // initMap(); //uncomment to initMap once initial variable set
 
   //sets radius in miles and number of sites within that radius for query
-  var radius = 3;
-  var numSites = 99;
+  var radius = 1;
+  var numSites = 3;
 
   function initMap() {
     // Create a map object and specify the DOM element for display.
@@ -32,6 +32,8 @@ $(document).ready(function() {
   // button functionality
   $("#find-me").on("click", function() {
     console.log("click");
+
+    //get the location
     getLocation();
   });
 
@@ -61,12 +63,12 @@ $(document).ready(function() {
         encAddress = encodeURIComponent(address);
         days = results[i].attributes.daysofOperation;
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
+        phone = results[i].attributes.contactPhone;
         LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
 
         listing = '<li class="list-group-item spec">' + name + '<br>' + sponsor + '<br>' + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '">' + address + '</a>' + '<br>' + 'Serving on: ' + days + '<br>' + 'Call ' + '<a href="tel:+1-' + contact + '">' +
           contact + '</a>' + ' for meal times</li>';
         $("#listings-area").append(listing);
-
       }
     });
     // initMap(); //uncomment to initMap after ajax query
@@ -91,6 +93,16 @@ $(document).ready(function() {
   function showPosition(position) {
     userX = position.coords.longitude;
     userY = position.coords.latitude;
+
+    //log the user's location into firebase
+    var database = firebase.database();
+    database.ref().push({
+      userX: userX,
+      userY: userY,
+      dateAdded: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    //find the sites!
     findSites();
   }
 
