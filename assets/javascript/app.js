@@ -137,6 +137,8 @@ $(document).ready(function() {
       searchResult: searchResult,
       searchTerms: searchTerms,
       searchDate: searchDate,
+      userX: userX,
+      userY: userY,
 
     });
   }
