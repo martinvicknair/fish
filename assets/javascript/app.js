@@ -139,6 +139,7 @@ $(document).ready(function() {
       searchDate: searchDate,
       userX: userX,
       userY: userY,
+      dateAdded: firebase.database.ServerValue.TIMESTAMP
 
     });
   }
