@@ -14,6 +14,10 @@ $(document).ready(function() {
   var userX = 39.6802645;
   var userY = -104.9444163;
   var LatLng = "userY, userX";
+  var userLoc = "";
+  var searchTerms = "SELF";
+  var searchResult = -1;
+  var database = firebase.database();
   // initMap(); //uncomment to initMap once initial variable set
 
   //sets radius in miles and number of sites within that radius for query
@@ -58,10 +62,15 @@ $(document).ready(function() {
       // console.log(response);
       obj = JSON.parse(response);
       results = obj.features;
-      console.log(results);
       $("#listings-area").empty();
       //header = '<p align="center"><img src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="" /></p>';
       //$("#listings-area").append(header);
+      searchDate = moment().format('YYYY-MM-DD dd h:mm a');
+      searchResult = results.length;
+      text = "'" + userLoc + "'" + " searched for " + "'" + searchTerms + "'" + " which returned " + "'" + searchResult + "'" + " listings";
+      console.log(text);
+      console.log(results);
+      pushFireData();
       for (var i = 0; i < results.length; i++) {
         // console.log(results[i].attributes);
         name = results[i].attributes.siteName;
@@ -118,17 +127,23 @@ $(document).ready(function() {
   function showPosition(position) {
     userX = position.coords.longitude;
     userY = position.coords.latitude;
-
-    //log the user's location into firebase
-    var database = firebase.database();
-    database.ref().push({
-      userX: userX,
-      userY: userY,
-      dateAdded: firebase.database.ServerValue.TIMESTAMP
-    });
+    getUserLoc();
 
     //find the sites!
     findSites();
+
+  }
+
+  //log the tracking data into firebase
+  function pushFireData() {
+    // initMap();
+    database.ref().push({
+      userLoc: userLoc,
+      searchResult: searchResult,
+      searchTerms: searchTerms,
+      searchDate: searchDate,
+
+    });
   }
 
   // from https://stackoverflow.com/questions/8358084/regular-expression-to-reformat-a-us-phone-number-in-javascript
@@ -138,5 +153,18 @@ $(document).ready(function() {
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
     return (!m) ? null : m[1] + "-" + m[2] + "-" + m[3];
   }
+
+  //returns human readable semi-anonymous place location for user
+  function getUserLoc() {
+
+    queryURL = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + userY + ',' + userX + "&key=AIzaSyCm9jtLUThY_3O1Uec3Ao-DWDkkBNzCl3U";
+    $.ajax({
+      url: queryURL,
+      method: 'GET'
+    }).done(function(response) {
+      userLoc = response.results[1].formatted_address;
+    });
+  };
+
 
 });
