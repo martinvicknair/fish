@@ -140,7 +140,6 @@ $(document).ready(function() {
       userX: userX,
       userY: userY,
       dateAdded: firebase.database.ServerValue.TIMESTAMP
-
     });
   }
 
