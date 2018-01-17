@@ -7,13 +7,13 @@
     <title>GET LUNCH DENVER</title>
     <!-- link to Jquery , fire base and other needed  -->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm9jtLUThY_3O1Uec3Ao-DWDkkBNzCl3U&callback=initMap"async defer></script>
     <!-- Bootstrap CSS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- This bootstrap style sheet   -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- link to local style sheet -->
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w"></script>
     <!-- local js file  -->
     <script src ="./assets/javascript/app.js" > </script>
     <!-- firebase call  -->
@@ -32,6 +32,7 @@
       </script>
   </head>
 <body>
+  <div class="container">
   <div><h1 align="center">GET LUNCH DENVER</h1><div>
   <!--<div class="well well-lg"id =" map-canvas">Map</div>-->
     <div>
@@ -45,6 +46,7 @@
 
     <div><h2 align="center">Closest Lunch To You</h2><div>
     <div><p align="center"><img src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="free lunch denver, free sack lunch, food near me"/></p></div>
+    <div id="map" style="height: 500px"></div>
     <div id="listings-area">
       <ul class="list-group">
         <li class="list-group-item">
@@ -54,5 +56,6 @@
 <footer>
   <div class="panel-footer" align="center">FISH</div>
 </footer>
+</div>
 </body>
 </html>

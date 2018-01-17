@@ -1,16 +1,18 @@
 $(document).ready(function() {
-  console.log("ready!");
+//   console.log("ready!");
   // window.onload = getLocation; // uncomment to geolocate on page load
 
   // elements in html
   var listings = document.getElementById("listings");
-  var mapCanvas = document.getElementById("map-canvas");
+  var mapCanvas = document.getElementById("map");
 
   // these values will come from the html5_geolocation
   // Latitude is the Y axis, longitude is the X axis.
   // initial values set to remote location so as to render a "blank" map until geolocation occurs
-  var userX = -89.89;
-  var userY = 25.68;
+  // var userX = -89.89;
+  // var userY = 25.68;
+  var userX = 39.6802645;
+  var userY = -104.9444163;
   var LatLng = "userY, userX";
   // initMap(); //uncomment to initMap once initial variable set
 
@@ -18,18 +20,21 @@ $(document).ready(function() {
   var radius = 1;
   var numSites = 3;
 
-  function initMap() {
-    // Create a map object and specify the DOM element for display.
-    var map = new google.maps.Map(document.getElementById('#map-canvas'), {
-      center: {
-        lat: -34.397,
-        lng: 150.644
-      },
-      zoom: 8
+  function initMap () {
+    var yourLocation = {lat: userX, lng: userY};
+    var map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 15,
+      center: yourLocation
+    });
+    var marker = new google.maps.Marker({
+      position: yourLocation,
+      map: map
     });
   };
 
-  // button functionality
+  initMap();
+   
+
   $("#find-me").on("click", function() {
     console.log("click");
 
@@ -133,6 +138,5 @@ $(document).ready(function() {
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
     return (!m) ? null : m[1] + "-" + m[2] + "-" + m[3];
   }
-
 
 });
