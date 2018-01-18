@@ -3,8 +3,9 @@ $(document).ready(function() {
   var listings = document.getElementById("listings");
   var mapCanvas = document.getElementById("map");
   //sets radius in miles and number of sites within that radius for query
-  var radius = 1;
-  var numSites = 3;
+  var radius = 3;
+  var numSites = 5;
+  var listingArr = [];
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
@@ -39,23 +40,23 @@ $(document).ready(function() {
     });
 
     //creates the map on the page
-    initMap();
+    // initMap();
 
     //find the sites!
     findSites();
   }
 
-  function initMap() {
-    var yourLocation = {lat: userY, lng: userX};
-    var map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 15,
-      center: yourLocation
-    });
-    var marker = new google.maps.Marker({
-      position: yourLocation,
-      map: map
-    });
-  }
+  // function initMap() {
+  //   var yourLocation = {lat: userY, lng: userX};
+  //   var map = new google.maps.Map(document.getElementById("map"), {
+  //     zoom: 15,
+  //     center: yourLocation
+  //   });
+  //   var marker = new google.maps.Marker({
+  //     position: yourLocation,
+  //     map: map
+  //   });
+  // }
 
   // api from https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services
   // https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query
@@ -83,7 +84,8 @@ $(document).ready(function() {
         days = results[i].attributes.daysofOperation;
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
         phone = results[i].attributes.contactPhone;
-        LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
+        listObj = {lat: results[i].geometry.y, lng: results[i].geometry.x};
+        listingArr.push(listObj);
 
         //insert code for calculating distance from LatLng to the x and y of the location
         milesCalc = '.3';
@@ -102,10 +104,42 @@ $(document).ready(function() {
         + '<h4>' + milesCalc + ' miles away</h4>'
         + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
         + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
-
         $("#listings-area").append(listing);
       }
+
+      
+      addPoints(listingArr);
+      
+
     });
+  };
+
+  function addPoints(listingArr) {
+    console.log('addpoints function yo')
+    
+    var yourLocation = { lat: userY, lng: userX };
+    
+    var map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: yourLocation
+    });
+
+    for(i=0; i<listingArr.length; i++) {
+      addMarker(listingArr[i], map);
+    };
+
+    // addMarker(yourLocation, map);
+    // var yourLocation2 = { lat: 39.6739293170005,  lng: - 104.95076490099969 }
+    // addMarker(yourLocation2, map);
+  };
+
+  function addMarker(location, map) {
+    // Add the marker at the clicked location, and add the next-available label
+    // from the array of alphabetical characters.
+    var marker = new google.maps.Marker({
+      position: location,
+      map: map
+    })
   };
 
 
