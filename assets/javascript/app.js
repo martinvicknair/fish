@@ -121,8 +121,14 @@ $(document).ready(function() {
     
     var map = new google.maps.Map(document.getElementById("map"), {
       zoom: 12,
-      center: yourLocation
+      center: yourLocation,
+      icon: "https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png"
     });
+    
+    var marker = new google.maps.Marker({
+      position: yourLocation,
+      map: map
+    })
 
     for(i=0; i<listingArr.length; i++) {
       addMarker(listingArr[i], map);
