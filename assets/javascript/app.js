@@ -57,6 +57,7 @@ $(document).ready(function() {
     });
   }
 
+
   // api from https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services
   // https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query
   function findSites() {
@@ -86,7 +87,32 @@ $(document).ready(function() {
         LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
 
         //insert code for calculating distance from LatLng to the x and y of the location
-        milesCalc = '.3';
+          milesCalc = mileCalc();
+          //insert code for calculating distance from LatLng to the x and y of the location
+            function mileCalc() {
+              jQuery.ajaxPrefilter(function(options) {
+    if (options.crossDomain && jQuery.support.cors) {
+        options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+    }
+});
+              queryURL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+               + userY + "," + userX
+               + "&destinations=" + results[i].geometry.y + "," + results[i].geometry.x
+               + "&key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w";
+              // console.log(queryURL);
+              $.ajax({
+                url: queryURL,
+                method: 'GET'
+              }).done(function(response) {
+                // console.log(response);
+                console.log(response.rows[0].elements[0].distance.text);
+                return milesCalc;
+                // console.log(milesCalc);
+              })
+            }; // end function mileCalc();
+
+//      obj = JSON.parse(response);
+//      results = obj.features;
 
         if (lunchTime == null) {
           lunchTime = 'not serving lunch';
@@ -107,6 +133,7 @@ $(document).ready(function() {
       }
     });
   };
+
 
 
 
