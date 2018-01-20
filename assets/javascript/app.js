@@ -14,6 +14,9 @@ $(document).ready(function() {
     console.log("search was clicked");
     //get the location
     getLocation();
+    listingArr = [];
+    listingArrTitle = [];
+    listingMASTER = [];
   });
 
   // from https://www.w3schools.com/html/html5_geolocation.asp
