@@ -3,14 +3,20 @@ $(document).ready(function() {
   var listings = document.getElementById("listings");
   var mapCanvas = document.getElementById("map");
   //sets radius in miles and number of sites within that radius for query
-  var radius = 1;
-  var numSites = 3;
+  var radius = 3;
+  var numSites = 5;
+  var listingArr = [];
+  var listingArrTitle = [];
+  var listingMASTER= [];
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
     console.log("search was clicked");
     //get the location
     getLocation();
+    listingArr = [];
+    listingArrTitle = [];
+    listingMASTER = [];
   });
 
   // from https://www.w3schools.com/html/html5_geolocation.asp
@@ -39,22 +45,10 @@ $(document).ready(function() {
     });
 
     //creates the map on the page
-    initMap();
+    // initMap();
 
     //find the sites!
     findSites();
-  }
-
-  function initMap() {
-    var yourLocation = {lat: userY, lng: userX};
-    var map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 15,
-      center: yourLocation
-    });
-    var marker = new google.maps.Marker({
-      position: yourLocation,
-      map: map
-    });
   }
 
 
@@ -84,7 +78,9 @@ $(document).ready(function() {
         days = results[i].attributes.daysofOperation;
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
         phone = results[i].attributes.contactPhone;
-        LatLng = results[i].geometry.y + ',' + results[i].geometry.x;
+        listObj = {lat: results[i].geometry.y, lng: results[i].geometry.x};
+        listingArrTitle.push(name);
+        listingArr.push(listObj);
 
         //insert code for calculating distance from LatLng to the x and y of the location
           milesCalc = mileCalc();
@@ -129,13 +125,66 @@ $(document).ready(function() {
         + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
         + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
 
+        listingMASTER.push(listing);
         $("#listings-area").append(listing);
       }
+
+      addPoints(listingArr, listingArrTitle, listingMASTER);
+     
     });
   };
 
+  function addPoints(listingArr, listingArrTitle, listingMASTER) {
+    console.log('addpoints function yo')
+    console.log(listingArrTitle[0])
+    
+    var yourLocation = { lat: userY, lng: userX };
+    
+    var map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 12,
+      center: yourLocation
+    });
+   
+    var marker = new google.maps.Marker({
+      position: yourLocation,
+      map: map,
+      title: "You Are Here",
+      label: "U"
+    })
+
+    for(i=0; i<listingArr.length; i++) {
+      addMarker(listingArr[i], map, listingArrTitle[i], i, listingMASTER[i]);
+    } 
+   
+    // addMarker(yourLocation, map);
+    // var yourLocation2 = { lat: 39.6739293170005,  lng: - 104.95076490099969 }
+    // addMarker(yourLocation2, map);
+  };
 
 
+  function addMarker(location, map, title, label, master) {
+    console.log(label)
+    label = label + 1;
+    // Add the marker at the clicked location, and add the next-available label
+    // from the array of alphabetical characters.
+    var marker = new google.maps.Marker({
+      position: location,
+      map: map,
+      title: title,
+      label: encodeURIComponent(label)
+      // adding code for info window 
+      //https://stackoverflow.com/questions/11507187/add-infowindow-to-looped-array-of-markers-on-google-map-using-api-v3
+     //clickable: true 
+    });
+    // adding code for info window 
+    marker.info = new google.maps.InfoWindow({
+    content: master
+  });
+    google.maps.event.addListener(marker, 'click', function() {
+    marker.info.open(map, this); 
+    });
+  
+  };
 
   //other stuff! :-D
 
