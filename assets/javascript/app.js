@@ -6,6 +6,8 @@ $(document).ready(function() {
   var radius = 3;
   var numSites = 5;
   var listingArr = [];
+  var listingArrTitle = [];
+  var listingMASTER= [];
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
@@ -46,18 +48,6 @@ $(document).ready(function() {
     findSites();
   }
 
-  // function initMap() {
-  //   var yourLocation = {lat: userY, lng: userX};
-  //   var map = new google.maps.Map(document.getElementById("map"), {
-  //     zoom: 15,
-  //     center: yourLocation
-  //   });
-  //   var marker = new google.maps.Marker({
-  //     position: yourLocation,
-  //     map: map
-  //   });
-  // }
-
   // api from https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services
   // https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query
   function findSites() {
@@ -85,6 +75,7 @@ $(document).ready(function() {
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
         phone = results[i].attributes.contactPhone;
         listObj = {lat: results[i].geometry.y, lng: results[i].geometry.x};
+        listingArrTitle.push(name);
         listingArr.push(listObj);
 
         //insert code for calculating distance from LatLng to the x and y of the location
@@ -104,52 +95,66 @@ $(document).ready(function() {
         + '<h4>' + milesCalc + ' miles away</h4>'
         + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
         + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
+
+        listingMASTER.push(listing);
         $("#listings-area").append(listing);
       }
 
-      
-      addPoints(listingArr);
-      
-
+      addPoints(listingArr, listingArrTitle, listingMASTER);
+     
     });
   };
 
-  function addPoints(listingArr) {
+  function addPoints(listingArr, listingArrTitle, listingMASTER) {
     console.log('addpoints function yo')
+    console.log(listingArrTitle[0])
     
     var yourLocation = { lat: userY, lng: userX };
     
     var map = new google.maps.Map(document.getElementById("map"), {
       zoom: 12,
-      center: yourLocation,
-      icon: "https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png"
+      center: yourLocation
     });
-    
+   
     var marker = new google.maps.Marker({
       position: yourLocation,
-      map: map
+      map: map,
+      title: "You Are Here",
+      label: "U"
     })
 
     for(i=0; i<listingArr.length; i++) {
-      addMarker(listingArr[i], map);
-    };
-
+      addMarker(listingArr[i], map, listingArrTitle[i], i, listingMASTER[i]);
+    } 
+   
     // addMarker(yourLocation, map);
     // var yourLocation2 = { lat: 39.6739293170005,  lng: - 104.95076490099969 }
     // addMarker(yourLocation2, map);
   };
 
-  function addMarker(location, map) {
+  function addMarker(location, map, title, label, master) {
+    console.log(label)
+    label = label + 1;
     // Add the marker at the clicked location, and add the next-available label
     // from the array of alphabetical characters.
     var marker = new google.maps.Marker({
       position: location,
-      map: map
-    })
+      map: map,
+      title: title,
+      label: encodeURIComponent(label)
+      // adding code for info window 
+      //https://stackoverflow.com/questions/11507187/add-infowindow-to-looped-array-of-markers-on-google-map-using-api-v3
+     //clickable: true 
+    });
+    // adding code for info window 
+    marker.info = new google.maps.InfoWindow({
+    content: master
+  });
+    google.maps.event.addListener(marker, 'click', function() {
+    marker.info.open(map, this); 
+    });
+  
   };
-
-
-
   //other stuff! :-D
 
   // from https://stackoverflow.com/questions/8358084/regular-expression-to-reformat-a-us-phone-number-in-javascript
