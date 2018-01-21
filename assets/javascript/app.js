@@ -7,7 +7,7 @@ $(document).ready(function() {
   var numSites = 5;
   var listingArr = [];
   var listingArrTitle = [];
-  var listingMASTER= [];
+  var listingMASTER = [];
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
@@ -43,14 +43,9 @@ $(document).ready(function() {
       userY: userY,
       dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
-
-    //creates the map on the page
-    // initMap();
-
     //find the sites!
     findSites();
   }
-
 
   // api from https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services
   // https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query
@@ -78,37 +73,32 @@ $(document).ready(function() {
         days = results[i].attributes.daysofOperation;
         contact = formatPhoneNumber(results[i].attributes.contactPhone);
         phone = results[i].attributes.contactPhone;
-        listObj = {lat: results[i].geometry.y, lng: results[i].geometry.x};
+        listObj = {
+          lat: results[i].geometry.y,
+          lng: results[i].geometry.x
+        };
         listingArrTitle.push(name);
         listingArr.push(listObj);
 
         //insert code for calculating distance from LatLng to the x and y of the location
-          milesCalc = mileCalc();
-          //insert code for calculating distance from LatLng to the x and y of the location
-            function mileCalc() {
-              jQuery.ajaxPrefilter(function(options) {
-    if (options.crossDomain && jQuery.support.cors) {
-        options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
-    }
-});
-              queryURL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-               + userY + "," + userX
-               + "&destinations=" + results[i].geometry.y + "," + results[i].geometry.x
-               + "&key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w";
-              // console.log(queryURL);
-              $.ajax({
-                url: queryURL,
-                method: 'GET'
-              }).done(function(response) {
-                // console.log(response);
-                console.log(response.rows[0].elements[0].distance.text);
-                return milesCalc;
-                // console.log(milesCalc);
-              })
-            }; // end function mileCalc();
-
-//      obj = JSON.parse(response);
-//      results = obj.features;
+        milesCalc = mileCalc();
+        function mileCalc() {
+          jQuery.ajaxPrefilter(function(options) {
+            if (options.crossDomain && jQuery.support.cors) {
+              options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+            }
+          });
+          queryURL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" +
+            userY + "," + userX +
+            "&destinations=" + results[i].geometry.y + "," + results[i].geometry.x +
+            "&key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w";
+          return $.ajax({
+              url: queryURL,
+              method: 'GET'
+            })
+            // short hand for returning data
+            .done(data => data);
+        }; // end function mileCalc();
 
         if (lunchTime == null) {
           lunchTime = 'not serving lunch';
@@ -116,35 +106,40 @@ $(document).ready(function() {
         if (breakfastTime == null) {
           breakfastTime = 'not serving breakfast';
         }
+        // use of arrow function for shorthand
+        // cant access data outside of ajax promise, so any work with data, has to happen in here
+        const distance = mileCalc().done(data => {
+          const distance = data.rows[0].elements[0].distance.text;
+          listing = '<li align="center" class="list-group-item spec"><strong><h1 align="center">' + (i + 1) + '</h1><h3>' + name + '</h3></strong>' +
+            'Serving on: ' + days + '<br>' +
+            'Breakfast Time: ' + breakfastTime + '<br>' +
+            'Lunch Time: ' + lunchTime + '<br>' +
+            '<h4>' + distance + ' miles away</h4>' +
+            '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>' +
+            '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
 
-        listing = '<li align="center" class="list-group-item spec"><strong><h1 align="center">' + (i+1) + '</h1><h3>' + name + '</h3></strong>'
-        + 'Serving on: ' + days + '<br>'
-        + 'Breakfast Time: ' + breakfastTime + '<br>'
-        + 'Lunch Time: ' + lunchTime + '<br>'
-        + '<h4>' + milesCalc + ' miles away</h4>'
-        + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
-        + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
-
-        listingMASTER.push(listing);
-        $("#listings-area").append(listing);
+          listingMASTER.push(listing);
+          $("#listings-area").append(listing);
+        });
       }
-
       addPoints(listingArr, listingArrTitle, listingMASTER);
-     
     });
   };
 
   function addPoints(listingArr, listingArrTitle, listingMASTER) {
     console.log('addpoints function yo')
     console.log(listingArrTitle[0])
-    
-    var yourLocation = { lat: userY, lng: userX };
-    
+
+    var yourLocation = {
+      lat: userY,
+      lng: userX
+    };
+
     var map = new google.maps.Map(document.getElementById("map"), {
       zoom: 12,
       center: yourLocation
     });
-   
+
     var marker = new google.maps.Marker({
       position: yourLocation,
       map: map,
@@ -152,10 +147,10 @@ $(document).ready(function() {
       label: "U"
     })
 
-    for(i=0; i<listingArr.length; i++) {
+    for (i = 0; i < listingArr.length; i++) {
       addMarker(listingArr[i], map, listingArrTitle[i], i, listingMASTER[i]);
-    } 
-   
+    }
+
     // addMarker(yourLocation, map);
     // var yourLocation2 = { lat: 39.6739293170005,  lng: - 104.95076490099969 }
     // addMarker(yourLocation2, map);
@@ -172,18 +167,18 @@ $(document).ready(function() {
       map: map,
       title: title,
       label: encodeURIComponent(label)
-      // adding code for info window 
+      // adding code for info window
       //https://stackoverflow.com/questions/11507187/add-infowindow-to-looped-array-of-markers-on-google-map-using-api-v3
-     //clickable: true 
+      //clickable: true
     });
-    // adding code for info window 
+    // adding code for info window
     marker.info = new google.maps.InfoWindow({
-    content: master
-  });
-    google.maps.event.addListener(marker, 'click', function() {
-    marker.info.open(map, this); 
+      content: master
     });
-  
+    google.maps.event.addListener(marker, 'click', function() {
+      marker.info.open(map, this);
+    });
+
   };
 
   //other stuff! :-D
