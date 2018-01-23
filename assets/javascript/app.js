@@ -8,6 +8,8 @@ $(document).ready(function() {
   var listingArr = [];
   var listingArrTitle = [];
   var listingMASTER= [];
+  var distArr = [];
+  
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
@@ -49,7 +51,7 @@ $(document).ready(function() {
   // api from https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services
   // https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query
   function findSites() {
-    var milesCalc = '.3';
+    var milesCalc = '';
     queryURL = "https://services1.arcgis.com/RLQu0rK7h4kbsBq5/ArcGIS/rest/services/Summer_Meal_Sites_2017/FeatureServer/0/query?geometry=%7Bx%3A" + userX + "%2C+y%3A" + userY +
       "%7D&geometryType=esriGeometryPoint&inSR=&spatialRel=esriSpatialRelIntersects&distance=" + radius +
       ".&units=esriSRUnit_StatuteMile&returnGeodetic=false&outFields=siteName%2CsponsoringOrganization%2C+address%2CcontactPhone%2CstartDate%2C+endDate%2C+daysofOperation%2C+breakfastTime%2C+lunchTime%2C+snackTime%2C+dinnerSupperTime&returnGeometry=true&multipatchOption=xyFootprint&resultRecordCount=" +
@@ -63,6 +65,24 @@ $(document).ready(function() {
       $("#listings-area").empty();
       //header = '<p align="center"><img src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="" /></p>';
       //$("#listings-area").append(header);
+      var promises = [];
+      var HandleAjaxResponse = function(i, y, x) {
+        // console.log(i, y, x)
+        //calc the distance
+        queryURL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+          + userY + "," + userX
+          + "&destinations=" + y + "," + x
+          + "&key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w";
+        console.log(name);
+        return $.ajax({
+          url: queryURL,
+          method: 'GET'
+        }).done(function (response) {
+          milesCalc = response.rows[0].elements[0].distance.text;
+          // console.log(i, y, x)
+          distArr[i] = milesCalc
+        });
+      }
       for (var i = 0; i < results.length; i++) {
         name = results[i].attributes.siteName;
         sponsor = results[i].attributes.sponsoringOrganization;
@@ -84,18 +104,11 @@ $(document).ready(function() {
             }
           });
 
-        //calc the distance
-        queryURL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-         + userY + "," + userX
-         + "&destinations=" + results[i].geometry.y + "," + results[i].geometry.x
-         + "&key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w";
 
-        $.ajax({
-          url: queryURL,
-          method: 'GET'
-        }).done(function(response) {
-          milesCalc = response.rows[0].elements[0].distance.text;
-
+        
+        var calcPromise = HandleAjaxResponse(i, results[i].geometry.y, results[i].geometry.x)
+          promises.push(calcPromise);
+          
           //build the primary array with all the info
           if (lunchTime == null) {
             lunchTime = 'not serving lunch';
@@ -108,7 +121,7 @@ $(document).ready(function() {
           + 'Serving on: ' + days + '<br>'
           + 'Breakfast Time: ' + breakfastTime + '<br>'
           + 'Lunch Time: ' + lunchTime + '<br>'
-          + '<h4>' + milesCalc + ' miles away</h4>'
+          + '<h4 id= ' + 'dist' + i + '>' + '</h4>'
           + '<a href="https://www.google.com/maps/search/?api=1&query=' + encAddress + '"><h4>' + address + '</h4></a>'
           + '<a href="tel:/1' + phone + '"><h4>' + contact + '</h4></a></li>';
 
@@ -117,10 +130,22 @@ $(document).ready(function() {
           //update the text beneath the map on the screen
           $("#listings-area").append(listing);
           //add the points + data to the map!
-          addPoints(listingArr, listingArrTitle, listingMASTER);
-        });
+          
+        
       };
+      // console.log(listingMASTER)
+
+      addPoints(listingArr, listingArrTitle, listingMASTER);
+
+      Promise.all(promises).then(function () {
+        for(let i =0; i<distArr.length; i++) {
+          document.getElementById('dist' + i).append(distArr[i])
+        }
+      });
+      
     });
+
+
   };
 
   function addPoints(listingArr, listingArrTitle, listingMASTER) {
@@ -140,7 +165,14 @@ $(document).ready(function() {
     for(i=0; i<listingArr.length; i++) {
       addMarker(listingArr[i], map, listingArrTitle[i], i, listingMASTER[i]);
     }
+
+    // for (let i = 0; i < distArr.length; i++) {
+    //   console.log(distArr[i])
+    //   document.getElementById('dist' + i).html(distArr[i])
+    // }
+
   };
+
 
   //adds a marker
   function addMarker(location, map, title, label, master) {
