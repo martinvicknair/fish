@@ -9,7 +9,7 @@ $(document).ready(function() {
   var listingArrTitle = [];
   var listingMASTER= [];
   var distArr = [];
-  
+
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
@@ -109,10 +109,10 @@ $(document).ready(function() {
           });
 
 
-        
+
         var calcPromise = HandleAjaxResponse(i, results[i].geometry.y, results[i].geometry.x)
           promises.push(calcPromise);
-          
+
           //build the primary array with all the info
           if (lunchTime == null) {
             lunchTime = 'not serving lunch';
@@ -134,8 +134,8 @@ $(document).ready(function() {
           //update the text beneath the map on the screen
           $("#listings-area").append(listing);
           //add the points + data to the map!
-          
-        
+
+
       };
       // console.log(listingMASTER)
 
@@ -146,7 +146,7 @@ $(document).ready(function() {
           document.getElementById('dist' + i).append(distArr[i])
         }
       });
-      
+
     });
 
 
