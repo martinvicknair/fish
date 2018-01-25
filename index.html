@@ -36,9 +36,30 @@
 <body>
   <div class="container">
   <div><h1 align="center">GET LUNCH DENVER</h1><div>
+
+  <div class="form-group">
+    <label for="mealsites">Select the number of Meal Sites:</label>
+    <select class="form-control" id="sitesform">
+      <option>5</option>
+      <option>10</option>
+      <option>20</option>
+      <option>50</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="radiusform">Select the radius (in miles) you want to search over:</label>
+    <select class="form-control" id="radiusform">
+      <option>3</option>
+      <option>5</option>
+      <option>10</option>
+      <option>25</option>
+    </select>
+  </div>
+
   <!--<div class="well well-lg"id =" map-canvas">Map</div>-->
     <div>
-        <p align="center"><a class="btn btn-primary btn-lg animated bounce infinite" id ="find-me">Search</a></p>
+        <p align="center"><a class="btn btn-primary btn-lg" id ="find-me">Search</a></p>
 
       <!--  <div class="form-group">
           <label class="control-label" for="focusedInput">My location</label>

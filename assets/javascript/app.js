@@ -13,11 +13,15 @@ $(document).ready(function() {
 
   //search button was clicked, get the location
   $("#find-me").on("click", function() {
+    radius = $("#radiusform").val()
+    numSites = $("#sitesform").val()
+    console.log(radius, numSites)
     //get the location
     getLocation();
     listingArr = [];
     listingArrTitle = [];
     listingMASTER = [];
+
   });
 
   // from https://www.w3schools.com/html/html5_geolocation.asp
