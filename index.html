@@ -13,6 +13,7 @@
     <!-- This bootstrap style sheet   -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- link to local style sheet -->
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsbVYGpHF47lZVZHMEsHQuJQXffqQFt-w"></script>
@@ -34,51 +35,67 @@
       </script>
   </head>
 <body>
+  <style>
+  body{
+    background-image: url("assets/images/background.jpg");
+  }
+  #mainbox{
+    background-color: white;
+  }
+  label{
+    font-family: 'Indie Flower', cursive;
+    font-size: 20px;
+  }
+  .pagetext{
+    font-family: 'Indie Flower', cursive;    
+  }
+  </style>
   <div class="container">
-  <div><h1 align="center">GET LUNCH DENVER</h1><div>
+    <div id="mainbox" class="well">
+      <div><h1 class="pagetext" align="center">GET LUNCH, DENVER!</h1><div>
+      <div><h2 class="pagetext" align="center">Find the closest lunch to you...</h2><div>
 
-  <div class="form-group">
-    <label for="mealsites">Select the number of Meal Sites:</label>
-    <select class="form-control" id="sitesform">
-      <option>1</option>
-      <option>5</option>
-      <option>10</option>
-      <option>20</option>
-      <option>50</option>
-    </select>
-  </div>
+      <div class="form-group">
+        <label for="mealsites">Select the number of meal sites:</label>
+        <select class="form-control" id="sitesform">
+          <option>1</option>
+          <option>5</option>
+          <option>10</option>
+          <option>20</option>
+          <option>50</option>
+        </select>
+      </div>
 
-  <div class="form-group">
-    <label for="radiusform">Select the radius (in miles) you want to search over:</label>
-    <select class="form-control" id="radiusform">
-      <option>1</option>
-      <option>3</option>
-      <option>5</option>
-      <option>10</option>
-      <option>25</option>
-    </select>
-  </div>
+      <div class="form-group">
+        <label for="radiusform">Select the radius (in miles) you want to search over:</label>
+        <select class="form-control" id="radiusform">
+          <option>1</option>
+          <option>3</option>
+          <option>5</option>
+          <option>10</option>
+          <option>25</option>
+        </select>
+      </div>
 
-  <!--<div class="well well-lg"id =" map-canvas">Map</div>-->
-    <div>
-        <p align="center"><a class="btn btn-primary btn-lg" id ="find-me">Search</a></p>
+      <!--<div class="well well-lg"id =" map-canvas">Map</div>-->
+        <div>
+            <p align="center"><a class="pagetext btn btn-primary btn-lg" id ="find-me">Search</a></p>
 
-      <!--  <div class="form-group">
-          <label class="control-label" for="focusedInput">My location</label>
-          <input class="form-control" id="location-input" type="text" value="My address">
-        </div>-->
-    </div>
-
-    <div><h2 align="center">Closest Lunch To You</h2><div>
-      <br>
-    <div><p align="center"><img class="animated lightSpeedIn" src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="free lunch denver, free sack lunch, food near me"/></p></div>
-    <div id="map" style="height: 500px; width: 100%"></div>
-    <div id="listings-area">
-      <ul class="list-group">
-        <li class="list-group-item">
-        </li>
-      </ul>
-    </div>
+          <!--  <div class="form-group">
+              <label class="control-label" for="focusedInput">My location</label>
+              <input class="form-control" id="location-input" type="text" value="My address">
+            </div>-->
+        </div>
+          <br>
+        <div><p align="center"><img class="animated lightSpeedIn" src="https://personablemedia.com/wp-content/uploads/2018/01/denver-123-sack.jpg" alt="free lunch denver, free sack lunch, food near me"/></p></div>
+        <div id="map" style="height: 500px; width: 100%"></div>
+        <div id="listings-area">
+          <ul class="list-group">
+            <li class="list-group-item">
+            </li>
+          </ul>
+        </div>
+      </div>
 <footer>
   <div class="panel-footer" align="center"><a href="about.html">About FISH</a></div>
   <!-- <div class="breadcrumb">
